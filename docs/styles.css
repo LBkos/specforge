@@ -1409,6 +1409,10 @@ p {
   gap: 11px;
 }
 
+.faq-item:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
 .faq-item {
   border: 1px solid var(--line);
   border-radius: 11px;

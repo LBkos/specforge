@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SpecForge — Turn OpenAPI specs into Swift</title>
+  <meta name="description" content="SpecForge is a native macOS app that turns OpenAPI 3 and Swagger 2 specs into a ready-to-build Swift package with Codable models, typed endpoints, and an async URLSession client.">
+  <meta name="author" content="SpecForge">
+  <meta name="theme-color" content="#090a0e">
+  <link rel="canonical" href="https://lbkos.github.io/specforge/">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="SpecForge">
+  <meta property="og:title" content="SpecForge — Turn OpenAPI specs into Swift">
+  <meta property="og:description" content="A native macOS app for turning OpenAPI and Swagger contracts into Codable models, typed endpoints, and an async networking client.">
+  <meta property="og:url" content="https://lbkos.github.io/specforge/">
+  <meta property="og:image" content="https://lbkos.github.io/specforge/assets/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SpecForge — Turn OpenAPI specs into Swift">
+  <meta name="twitter:description" content="Native macOS client generation for OpenAPI and Swagger. Codable models, typed endpoints, async networking.">
+  <meta name="twitter:image" content="https://lbkos.github.io/specforge/assets/og.png">
+
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="apple-touch-icon" href="assets/app-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="preload" as="image" href="assets/results.png">
+  <link rel="stylesheet" href="styles.css">
+  <script>document.documentElement.classList.remove('no-js');document.documentElement.classList.add('js');</script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header" id="top">
+    <div class="header-inner">
+      <a class="brand" href="#top">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" role="img">
+            <defs>
+              <linearGradient id="brandGradient" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#ff8a5e"/>
+                <stop offset="1" stop-color="#e85024"/>
+              </linearGradient>
+            </defs>
+            <rect width="32" height="32" rx="9" fill="url(#brandGradient)"/>
+            <path d="M18.4 5.8 9.7 17.5h5.1l-1.2 8.7 8.7-11.7h-5.1l1.2-8.7Z" fill="#fff"/>
+          </svg>
+        </span>
+        <span class="brand-name">SpecForge</span>
+        <span class="brand-tag">OpenAPI → Swift</span>
+      </a>
+
+      <nav class="main-nav" id="mainNav" aria-label="Main navigation">
+        <a href="#features">Features</a>
+        <a href="#workflow">Workflow</a>
+        <a href="#output">Output</a>
+        <a href="#preview">Preview</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+
+      <div class="header-actions">
+        <a class="github-link" href="https://github.com/LBkos/specforge" target="_blank" rel="noopener" aria-label="SpecForge on GitHub">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 .7a11.5 11.5 0 0 0-3.64 22.41c.58.11.79-.25.79-.55v-2.15c-3.22.7-3.9-1.37-3.9-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.04 1.77 2.72 1.26 3.39.96.1-.75.4-1.26.74-1.55-2.57-.29-5.27-1.29-5.27-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.4-2.71 5.38-5.29 5.67.42.36.79 1.07.79 2.16v3.2c0 .3.21.67.8.55A11.5 11.5 0 0 0 12 .7Z"/></svg>
+          <span>GitHub</span>
+          <span class="stars" data-stars hidden></span>
+        </a>
+        <a class="button button-primary button-small download-link" href="https://github.com/LBkos/specforge/releases/latest/download/SpecForge.dmg">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path fill="currentColor" d="M10 2.3c.5 0 .9.4.9.9v7.1l2.1-2.1a.9.9 0 1 1 1.3 1.3l-3.7 3.7a.9.9 0 0 1-1.3 0L5.6 9.5a.9.9 0 1 1 1.3-1.3l2.1 2.1V3.2c0-.5.4-.9 1-.9ZM4 14.4c0-.5.4-.9.9-.9s.9.4.9.9v1.2h8.4v-1.2a.9.9 0 0 1 1.8 0v1.7c0 .8-.7 1.5-1.5 1.5H5.5c-.8 0-1.5-.7-1.5-1.5v-1.7Z"/></svg>
+          Download
+        </a>
+        <button class="menu-toggle" type="button" aria-label="Open navigation menu" aria-controls="mainNav" aria-expanded="false">
+          <span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero section-shell">
+      <div class="hero-glow hero-glow-one" aria-hidden="true"></div>
+      <div class="hero-glow hero-glow-two" aria-hidden="true"></div>
+
+      <div class="hero-copy reveal">
+        <p class="eyebrow"><span class="live-dot"></span> Native macOS · v1.0</p>
+        <h1>Turn API specs into <span class="gradient-text">Swift you can ship.</span></h1>
+        <p class="hero-lede">SpecForge converts OpenAPI 3 and Swagger 2 documents into a ready-to-build Swift package — Codable models, typed endpoints, and an async <code>URLSession</code> client. No boilerplate. No web wrapper.</p>
+
+        <div class="hero-actions">
+          <a class="button button-primary button-large download-link" href="https://github.com/LBkos/specforge/releases/latest/download/SpecForge.dmg">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path fill="currentColor" d="M10 2.3c.5 0 .9.4.9.9v7.1l2.1-2.1a.9.9 0 1 1 1.3 1.3l-3.7 3.7a.9.9 0 0 1-1.3 0L5.6 9.5a.9.9 0 1 1 1.3-1.3l2.1 2.1V3.2c0-.5.4-.9 1-.9ZM4 14.4c0-.5.4-.9.9-.9s.9.4.9.9v1.2h8.4v-1.2a.9.9 0 0 1 1.8 0v1.7c0 .8-.7 1.5-1.5 1.5H5.5c-.8 0-1.5-.7-1.5-1.5v-1.7Z"/></svg>
+            <span>Download for macOS</span>
+            <span class="button-meta" data-release-version>v1.0.0</span>
+          </a>
+          <a class="button button-ghost button-large" href="https://github.com/LBkos/specforge" target="_blank" rel="noopener">
+            View source
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M4 10h11m-4-4 4 4-4 4"/></svg>
+          </a>
+        </div>
+
+        <p class="hero-note">Free · Universal binary · macOS 14+ · Specs stay on your Mac</p>
+
+        <div class="hero-formats" aria-label="Supported specification formats">
+          <span>OpenAPI 3.0</span>
+          <span>OpenAPI 3.1</span>
+          <span>Swagger 2.0</span>
+          <span>JSON</span>
+          <span>YAML</span>
+        </div>
+      </div>
+
+      <div class="hero-visual reveal">
+        <div class="window-frame">
+          <div class="window-bar" aria-hidden="true">
+            <span class="traffic red"></span>
+            <span class="traffic yellow"></span>
+            <span class="traffic green"></span>
+            <span class="window-title">SpecForge — Orbit Tasks API</span>
+          </div>
+          <button class="screenshot-button" type="button" data-lightbox="assets/results.png" aria-label="Expand SpecForge results screenshot">
+            <img src="assets/results.png" width="1240" height="820" alt="SpecForge showing generated Swift models for the Orbit Tasks API">
+          </button>
+        </div>
+
+        <div class="float-card float-card-code" aria-hidden="true">
+          <span class="float-icon">{ }</span>
+          <span><strong>14 types</strong><small>Codable &amp; ready</small></span>
+        </div>
+        <div class="float-card float-card-endpoint" aria-hidden="true">
+          <span class="float-icon bolt">⚡</span>
+          <span><strong>13 endpoints</strong><small>async/await</small></span>
+        </div>
+        <div class="visual-orbit" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <section class="format-strip section-shell reveal" aria-label="At a glance">
+      <div class="strip-item"><strong>100%</strong><span>Native SwiftUI</span></div>
+      <div class="strip-divider" aria-hidden="true"></div>
+      <div class="strip-item"><strong>1 spec</strong><span>Complete package</span></div>
+      <div class="strip-divider" aria-hidden="true"></div>
+      <div class="strip-item"><strong>0</strong><span>Lines of boilerplate</span></div>
+      <div class="strip-divider" aria-hidden="true"></div>
+      <div class="strip-item"><strong>On-device</strong><span>No telemetry</span></div>
+    </section>
+
+    <section class="section section-shell" id="features">
+      <div class="section-heading reveal">
+        <p class="eyebrow">Why SpecForge</p>
+        <h2>Everything between the contract and the client.</h2>
+        <p>Stop hand-writing models from JSON examples. Bring the spec, choose a few options, and get a package that compiles.</p>
+      </div>
+
+      <div class="feature-grid">
+        <article class="feature-card reveal">
+          <span class="feature-icon icon-coral">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M12 3v12m0 0 4-4m-4 4-4-4M5 17v2.5c0 .8.7 1.5 1.5 1.5h11c.8 0 1.5-.7 1.5-1.5V17"/></svg>
+          </span>
+          <h3>Three ways in</h3>
+          <p>Fetch a live URL, paste JSON or YAML, or drop a spec file. Localhost and private specs are supported.</p>
+          <ul class="mini-list">
+            <li>URL, paste, and file drop</li>
+            <li>Private specs with auth</li>
+          </ul>
+        </article>
+
+        <article class="feature-card reveal">
+          <span class="feature-icon icon-mint">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M14.5 9.5a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1m-2.9-2.7a4 4 0 0 0 5.7 0l3-3a4 4 0 1 0-5.7-5.7l-1 1"/></svg>
+          </span>
+          <h3>Auth-aware fetching</h3>
+          <p>Bearer tokens, API keys, and HTTP Basic auth for protected specifications. Credentials never enter the generated code.</p>
+          <ul class="mini-list">
+            <li>Bearer &amp; API key</li>
+            <li>Basic authentication</li>
+          </ul>
+        </article>
+
+        <article class="feature-card reveal">
+          <span class="feature-icon icon-sky">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Zm0 9 8-4.5M12 12v9M12 12 4 7.5"/></svg>
+          </span>
+          <h3>Faithful Codable models</h3>
+          <p>Nested objects, enums, nullability, maps, unions, allOf inheritance, and recursive types become compilable Swift.</p>
+          <ul class="mini-list">
+            <li>String &amp; integer enums</li>
+            <li>oneOf / anyOf unions</li>
+          </ul>
+        </article>
+
+        <article class="feature-card reveal">
+          <span class="feature-icon icon-gold">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="m13 2-8 12h6l-1 8 9-12h-6l0-8Z"/></svg>
+          </span>
+          <h3>A real network client</h3>
+          <p>One typed async method per operation, with path, query, and header parameters plus JSON request bodies.</p>
+          <ul class="mini-list">
+            <li>URLSession + async/await</li>
+            <li>Typed APIError handling</li>
+          </ul>
+        </article>
+
+        <article class="feature-card reveal">
+          <span class="feature-icon icon-coral">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M4 8.5 12 4l8 4.5v9L12 22l-8-4.5v-9Zm0 0L12 13m8-4.5L12 13m0 9v-9"/></svg>
+          </span>
+          <h3>Ready to build</h3>
+          <p>Export a complete Swift package with a manifest, sources, and a README. Or choose flat files for an existing target.</p>
+          <ul class="mini-list">
+            <li>SwiftPM package</li>
+            <li>Package, sources, docs</li>
+          </ul>
+        </article>
+
+        <article class="feature-card reveal">
+          <span class="feature-icon icon-mint">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M12 3 5 6v5c0 4.6 3 8.4 7 10 4-1.6 7-5.4 7-10V6l-7-3Zm-3 9 2 2 4-4"/></svg>
+          </span>
+          <h3>Private by design</h3>
+          <p>A native, on-device workflow. No telemetry, no uploaded specs, and no secrets embedded in client code.</p>
+          <ul class="mini-list">
+            <li>No accounts</li>
+            <li>No analytics</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section workflow-section" id="workflow">
+      <div class="section-shell">
+        <div class="section-heading reveal">
+          <p class="eyebrow">How it works</p>
+          <h2>From spec to package in three steps.</h2>
+          <p>The app handles the tedious parts: parsing, naming, type mapping, request building, and file assembly.</p>
+        </div>
+
+        <div class="workflow-grid">
+          <article class="workflow-step reveal">
+            <span class="step-number">01</span>
+            <div class="step-visual step-visual-input">
+              <span class="field-dot"></span>
+              <span class="field-text">https://api.orbit.example/v1/openapi.json</span>
+              <span class="field-badge">GET</span>
+            </div>
+            <h3>Bring your spec</h3>
+            <p>Use an OpenAPI 3.0/3.1 or Swagger 2.0 document. Fetch it from a URL, paste it, or drop a JSON/YAML file.</p>
+          </article>
+
+          <article class="workflow-step reveal">
+            <span class="step-number">02</span>
+            <div class="step-visual step-visual-settings">
+              <div class="setting-row"><span>Access</span><b>Public</b></div>
+              <div class="setting-row"><span>Dates</span><b>Date</b></div>
+              <div class="setting-row"><span>Package</span><i class="toggle"></i></div>
+            </div>
+            <h3>Shape the client</h3>
+            <p>Choose access level, date mapping, a type prefix, and an optional base URL override. Sensible defaults are already set.</p>
+          </article>
+
+          <article class="workflow-step reveal">
+            <span class="step-number">03</span>
+            <div class="step-visual step-visual-export">
+              <div class="file-row"><span class="file-icon">◇</span> Package.swift</div>
+              <div class="file-row"><span class="file-icon">◇</span> Models.swift</div>
+              <div class="file-row"><span class="file-icon">◇</span> APIClient.swift</div>
+              <div class="file-row"><span class="file-icon">◇</span> Endpoints.swift</div>
+            </div>
+            <h3>Export &amp; build</h3>
+            <p>Review every file in the app, then export a Swift package that opens directly in Xcode and builds with SwiftPM.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-shell" id="output">
+      <div class="output-grid">
+        <div class="output-copy reveal">
+          <p class="eyebrow">The output</p>
+          <h2>Generated code you’d write yourself.</h2>
+          <p>SpecForge keeps the client small, readable, and dependency-free. Just Foundation, <code>URLSession</code>, and standard Swift concurrency.</p>
+
+          <ul class="check-list">
+            <li><span>✓</span> Clear names derived from the contract</li>
+            <li><span>✓</span> CodingKeys only when keys need mapping</li>
+            <li><span>✓</span> Runtime-configurable authentication</li>
+            <li><span>✓</span> ISO 8601 dates and typed errors</li>
+            <li><span>✓</span> No third-party runtime dependencies</li>
+          </ul>
+
+          <div class="package-tree" aria-label="Generated package structure">
+            <div class="tree-title"><span class="tree-dot"></span> OrbitTasksAPIKit</div>
+            <div class="tree-line"><span class="tree-guide"></span><span class="tree-item">Package.swift</span></div>
+            <div class="tree-line"><span class="tree-guide"></span><span class="tree-item">README.md</span></div>
+            <div class="tree-line"><span class="tree-guide"></span><span class="tree-folder">Sources/OrbitTasksAPIKit/</span></div>
+            <div class="tree-line nested"><span class="tree-guide"></span><span class="tree-item">Models.swift</span></div>
+            <div class="tree-line nested"><span class="tree-guide"></span><span class="tree-item">APIClient.swift</span></div>
+            <div class="tree-line nested"><span class="tree-guide"></span><span class="tree-item">Endpoints.swift</span></div>
+            <div class="tree-line nested"><span class="tree-guide"></span><span class="tree-item">JSONValue.swift</span></div>
+          </div>
+        </div>
+
+        <div class="code-console reveal">
+          <div class="console-header">
+            <div class="console-tabs" role="tablist" aria-label="Generated files">
+              <button type="button" role="tab" aria-selected="true" aria-controls="panel-models" id="tab-models" data-tab="models" class="console-tab active">Models.swift</button>
+              <button type="button" role="tab" aria-selected="false" aria-controls="panel-client" id="tab-client" data-tab="client" class="console-tab">APIClient.swift</button>
+              <button type="button" role="tab" aria-selected="false" aria-controls="panel-endpoints" id="tab-endpoints" data-tab="endpoints" class="console-tab">Endpoints.swift</button>
+            </div>
+            <button type="button" class="copy-button" data-copy-button aria-label="Copy visible code">
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 7V4.8c0-.7.6-1.3 1.3-1.3h6.9c.7 0 1.3.6 1.3 1.3v6.9c0 .7-.6 1.3-1.3 1.3H13M4.8 7h6.9c.7 0 1.3.6 1.3 1.3v6.9c0 .7-.6 1.3-1.3 1.3H4.8c-.7 0-1.3-.6-1.3-1.3V8.3c0-.7.6-1.3 1.3-1.3Z"/></svg>
+              <span>Copy</span>
+            </button>
+          </div>
+
+          <div class="console-body">
+            <div class="code-panel" role="tabpanel" id="panel-models" aria-labelledby="tab-models" data-panel="models">
+<pre><code data-highlight="swift">public enum TaskStatus: String, Codable, CaseIterable {
+    case backlog = "backlog"
+    case inProgress = "in_progress"
+    case inReview = "in_review"
+    case done = "done"
+}
+
+public struct Task: Codable {
+    public var id: String
+    public var title: String
+    public var status: TaskStatus
+    public var priority: Priority
+    public var dueDate: Date?
+    public var labels: [String]?
+    public var assignee: User?
+    public var metadata: [String: String]?
+}</code></pre>
+            </div>
+
+            <div class="code-panel" role="tabpanel" id="panel-client" aria-labelledby="tab-client" data-panel="client" hidden>
+<pre><code data-highlight="swift">public final class APIClient: @unchecked Sendable {
+    public static let shared = APIClient()
+    public var auth: APIAuth?
+
+    public func send&lt;T: Decodable&gt;(
+        path: String,
+        method: HTTPMethod,
+        queryItems: [URLQueryItem] = [],
+        headers: [String: String] = [:],
+        responseType: T.Type
+    ) async throws -&gt; T {
+        let data = try await execute(
+            path: path,
+            method: method,
+            queryItems: queryItems,
+            headers: headers,
+            bodyData: nil
+        )
+        return try decode(data, as: responseType)
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-panel" role="tabpanel" id="panel-endpoints" aria-labelledby="tab-endpoints" data-panel="endpoints" hidden>
+<pre><code data-highlight="swift">public func listTasks(
+    workspaceID: String,
+    status: TaskStatus? = nil,
+    assigneeID: String? = nil,
+    limit: Int? = nil,
+    cursor: String? = nil
+) async throws -&gt; TaskPage {
+    let path = "/workspaces/\(workspaceID)/tasks"
+    var queryItems: [URLQueryItem] = []
+
+    if let status {
+        queryItems.append(.init(name: "status", value: status.rawValue))
+    }
+    if let limit {
+        queryItems.append(.init(name: "limit", value: String(limit)))
+    }
+
+    return try await send(
+        path: path,
+        method: .get,
+        queryItems: queryItems,
+        responseType: TaskPage.self
+    )
+}</code></pre>
+            </div>
+          </div>
+
+          <div class="console-footer">
+            <span class="console-status"><i></i> Generated by SpecForge</span>
+            <span class="console-meta">Swift 5.9+ · async/await</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section preview-section" id="preview">
+      <div class="section-shell preview-grid">
+        <div class="preview-copy reveal">
+          <p class="eyebrow">A native workflow</p>
+          <h2>Built for the Mac, not the browser.</h2>
+          <p>SpecForge is a real SwiftUI application with drag and drop, keyboard shortcuts, native panels, and a code viewer. It feels at home next to Xcode.</p>
+
+          <div class="preview-features">
+            <div class="preview-feature">
+              <span class="preview-feature-icon">⌘</span>
+              <div><strong>Keyboard-first</strong><span>⌘O open, ⌘↩ generate, ⌘E export</span></div>
+            </div>
+            <div class="preview-feature">
+              <span class="preview-feature-icon">⤓</span>
+              <div><strong>Drag &amp; drop</strong><span>Drop a JSON or YAML spec straight onto the app</span></div>
+            </div>
+            <div class="preview-feature">
+              <span class="preview-feature-icon">⌁</span>
+              <div><strong>On-device</strong><span>No accounts, analytics, or uploaded code</span></div>
+            </div>
+          </div>
+
+          <a class="text-link" href="https://github.com/LBkos/specforge#use" target="_blank" rel="noopener">Read the full walkthrough <span>→</span></a>
+        </div>
+
+        <div class="preview-shot reveal">
+          <button class="screenshot-button screenshot-plain" type="button" data-lightbox="assets/input.png" aria-label="Expand SpecForge input screenshot">
+            <img src="assets/input.png" width="1240" height="820" loading="lazy" alt="SpecForge input screen for URL, paste, and file sources">
+          </button>
+          <div class="preview-caption"><span class="caption-dot"></span> URL, paste, or file — with auth and generation settings in one place.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-shell compatibility-section">
+      <div class="compatibility-card reveal">
+        <div class="compatibility-copy">
+          <p class="eyebrow">Compatibility</p>
+          <h2>OpenAPI and Swagger, with honest limits.</h2>
+          <p>SpecForge handles the common production contracts. When it can’t map something safely, it tells you in the Notices panel instead of silently dropping it.</p>
+        </div>
+        <div class="compatibility-columns">
+          <div>
+            <h3>Supported</h3>
+            <ul class="compat-list yes">
+              <li>OpenAPI 3.0 / 3.1</li>
+              <li>Swagger 2.0</li>
+              <li>JSON and YAML</li>
+              <li>$ref schemas &amp; parameters</li>
+              <li>Enums, unions, maps, allOf</li>
+              <li>JSON, text, binary, empty responses</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Not yet</h3>
+            <ul class="compat-list no">
+              <li>External $ref documents</li>
+              <li>Multipart / form-urlencoded bodies</li>
+              <li>Cookie parameters</li>
+              <li>Typed error response bodies</li>
+              <li>Discriminator-driven decoding</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-shell" id="faq">
+      <div class="section-heading reveal">
+        <p class="eyebrow">FAQ</p>
+        <h2>Good to know before you build.</h2>
+      </div>
+
+      <div class="faq-grid">
+        <details class="faq-item reveal">
+          <summary>Is SpecForge really a native Mac app?</summary>
+          <p>Yes. It’s built with SwiftUI and runs entirely on your Mac. There is no web view, local server, or account layer in the app.</p>
+        </details>
+        <details class="faq-item reveal">
+          <summary>Where do my credentials go?</summary>
+          <p>They are attached only to the outgoing request that downloads the specification. Tokens and passwords are never embedded in generated files, logged, or sent anywhere else.</p>
+        </details>
+        <details class="faq-item reveal">
+          <summary>What Swift version does the generated code need?</summary>
+          <p>The generated package uses Swift 5.9+ and targets iOS 15, macOS 12, tvOS 15, and watchOS 8 or later. The macOS app itself requires macOS 14+.</p>
+        </details>
+        <details class="faq-item reveal">
+          <summary>Can I use the output in an existing Xcode project?</summary>
+          <p>Yes. Export a package and add it as a local dependency, or turn off “Swift Package” during generation to get flat Swift files you can drag into a target.</p>
+        </details>
+        <details class="faq-item reveal">
+          <summary>Does it handle private specification URLs?</summary>
+          <p>Yes. Choose Bearer, API key, or Basic authentication before fetching. The URL flow supports protected endpoints and localhost.</p>
+        </details>
+        <details class="faq-item reveal">
+          <summary>Is it free?</summary>
+          <p>The app is free to download. The source is available on GitHub so you can inspect the generator and build it yourself.</p>
+        </details>
+      </div>
+    </section>
+
+    <section class="section-shell final-cta reveal">
+      <div class="cta-card">
+        <div class="cta-glow" aria-hidden="true"></div>
+        <span class="cta-icon"><img src="assets/app-icon.png" width="72" height="72" alt="SpecForge app icon"></span>
+        <p class="eyebrow">Ready when your spec is</p>
+        <h2>Skip the model-writing. Ship the client.</h2>
+        <p>Download SpecForge, drop in a spec, and have a Swift package in under a minute.</p>
+        <div class="cta-actions">
+          <a class="button button-primary button-large download-link" href="https://github.com/LBkos/specforge/releases/latest/download/SpecForge.dmg">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path fill="currentColor" d="M10 2.3c.5 0 .9.4.9.9v7.1l2.1-2.1a.9.9 0 1 1 1.3 1.3l-3.7 3.7a.9.9 0 0 1-1.3 0L5.6 9.5a.9.9 0 1 1 1.3-1.3l2.1 2.1V3.2c0-.5.4-.9 1-.9ZM4 14.4c0-.5.4-.9.9-.9s.9.4.9.9v1.2h8.4v-1.2a.9.9 0 0 1 1.8 0v1.7c0 .8-.7 1.5-1.5 1.5H5.5c-.8 0-1.5-.7-1.5-1.5v-1.7Z"/></svg>
+            Download for macOS
+          </a>
+          <a class="button button-ghost button-large" href="https://github.com/LBkos/specforge" target="_blank" rel="noopener">Star on GitHub</a>
+        </div>
+        <p class="cta-note">macOS 14+ · Universal (Apple Silicon &amp; Intel) · No account required</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a class="brand" href="#top">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32" role="img"><rect width="32" height="32" rx="9" fill="#ff6b3d"/><path d="M18.4 5.8 9.7 17.5h5.1l-1.2 8.7 8.7-11.7h-5.1l1.2-8.7Z" fill="#fff"/></svg>
+          </span>
+          <span class="brand-name">SpecForge</span>
+        </a>
+        <p>A native macOS client generator for OpenAPI and Swagger.</p>
+      </div>
+      <div class="footer-links">
+        <div>
+          <h3>Product</h3>
+          <a href="#features">Features</a>
+          <a href="#output">Generated output</a>
+          <a href="#faq">FAQ</a>
+        </div>
+        <div>
+          <h3>Project</h3>
+          <a href="https://github.com/LBkos/specforge" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://github.com/LBkos/specforge/releases" target="_blank" rel="noopener">Releases</a>
+          <a href="https://github.com/LBkos/specforge#readme" target="_blank" rel="noopener">Documentation</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span data-year>2026</span> SpecForge. Built with SwiftUI.</span>
+      <span>Not affiliated with Apple, OpenAPI Initiative, or Swagger.</span>
+    </div>
+  </footer>
+
+  <dialog class="lightbox" id="lightbox" aria-label="Screenshot preview">
+    <button class="lightbox-close" type="button" aria-label="Close screenshot">×</button>
+    <img src="assets/results.png" alt="SpecForge screenshot preview">
+  </dialog>
+
+  <script src="app.js" defer></script>
+</body>
+</html>

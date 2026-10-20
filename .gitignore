@@ -1,0 +1,11 @@
+.DS_Store
+build/
+.build/
+build-release/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+SpecForge.xcodeproj/project.xcworkspace/xcuserdata/
+.swiftpm-cache/
+.xcodehome/
+dist/

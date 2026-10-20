@@ -1,0 +1,18 @@
+{
+  "name": "SpecForge",
+  "short_name": "SpecForge",
+  "description": "Turn OpenAPI specs into Swift you can ship.",
+  "start_url": "/specforge/",
+  "scope": "/specforge/",
+  "display": "standalone",
+  "background_color": "#090a0e",
+  "theme_color": "#090a0e",
+  "icons": [
+    {
+      "src": "assets/app-icon.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

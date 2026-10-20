@@ -319,7 +319,7 @@
     })
       .then((response) => (response.ok ? response.json() : null))
       .then((data) => {
-        if (!data || !Number.isFinite(data.stargazers_count)) return;
+        if (!data || !Number.isFinite(data.stargazers_count) || data.stargazers_count <= 0) return;
         starsElement.textContent = `★ ${data.stargazers_count}`;
         starsElement.hidden = false;
       })
